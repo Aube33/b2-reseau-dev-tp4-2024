@@ -1,8 +1,14 @@
+# pylint: disable=missing-module-docstring, global-variable-not-assigned, line-too-long
+
 import asyncio
 
 CLIENTS = {}
 
 async def handle_client_msg(reader, writer):
+    """
+    Used to handle data received from client
+    """
+
     global CLIENTS
     while True:
         data = await reader.read(1024)
@@ -26,7 +32,7 @@ async def handle_client_msg(reader, writer):
                     clientData = CLIENTS[client]
 
                     clientData["w"].write(f"Annonce : {CLIENTS[addr]["pseudo"]} a rejoint la chatroom".encode())
-    
+
         else:
             for client in CLIENTS.keys():
                 if client != addr:
@@ -36,6 +42,9 @@ async def handle_client_msg(reader, writer):
         await writer.drain()
 
 async def main():
+    """
+    Main function to have async
+    """
     server = await asyncio.start_server(handle_client_msg, '127.0.0.1', 8888)
 
     addrs = ', '.join(str(sock.getsockname()) for sock in server.sockets)
@@ -43,6 +52,7 @@ async def main():
 
     async with server:
         await server.serve_forever()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

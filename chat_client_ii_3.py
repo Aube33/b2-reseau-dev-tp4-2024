@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring, import-error
+
 import asyncio
 import aioconsole
 
