@@ -1,0 +1,25 @@
+import sys
+import requests
+
+DL_FOLDER = "/tmp/web_page"
+argv = sys.argv[1:]
+
+def get_content(url:str):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        raise Exception(f'Failed to retrieve the webpage. Status code: {response.status_code}')
+    return content
+
+def write_content(content:str, file:str):
+    f = open(f"{DL_FOLDER}/{file}", "w")
+    f.write(content)
+    f.close()
+
+if len(argv)==0:
+    print("Usage: python web_sync.py <URL>")
+else:
+    url_request = argv[0]
+    html_content = get_content(url_request)
+    write_content(html_content, "page.html")
