@@ -1,7 +1,7 @@
 import sys
 import requests
 
-DL_FOLDER = "/tmp/web_page"
+DL_FILE = "/tmp/web_page"
 argv = sys.argv[1:]
 
 def get_content(url:str):
@@ -13,7 +13,7 @@ def get_content(url:str):
     return content
 
 def write_content(content:str, file:str):
-    f = open(f"{DL_FOLDER}/{file}", "w")
+    f = open(file, "w")
     f.write(content)
     f.close()
 
@@ -22,4 +22,4 @@ if len(argv)==0:
 else:
     url_request = argv[0]
     html_content = get_content(url_request)
-    write_content(html_content, "page.html")
+    write_content(html_content, DL_FILE)
