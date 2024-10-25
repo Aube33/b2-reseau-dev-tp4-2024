@@ -42,3 +42,7 @@ Chrono lancé !
 Chrono fini !
 Résultat: 1.123s
 ```
+
+## II. Chat room
+### 1. Intro
+### 2. Première version
