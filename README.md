@@ -48,3 +48,5 @@ Résultat: 1.123s
 ### 2. Première version
 ### 3. Client asynchrone
 ### 4. Un chat fonctionnel
+### 5. Gérer des pseudos
+### 6. Déconnexion

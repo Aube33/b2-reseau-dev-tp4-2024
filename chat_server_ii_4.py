@@ -6,14 +6,14 @@ async def handle_client_msg(reader, writer):
     global CLIENTS
     while True:
         data = await reader.read(1024)
+        if data == b'':
+            break
+
         addr = writer.get_extra_info('peername')
 
         CLIENTS[addr] = {}
         CLIENTS[addr]["r"] = reader
         CLIENTS[addr]["w"] = writer
-
-        if data == b'':
-            break
 
         message = data.decode()
         print(f"Message received from {addr[0]}:{addr[1]} : {message!r}")
