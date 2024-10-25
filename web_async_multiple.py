@@ -32,7 +32,7 @@ async def main():
     else:
         urls_file = argv[0]
         tasks = []
-        with open(urls_file, "r", encoding="UTF-8") as file:
+        with open(urls_file, "r", encoding="utf-8") as file:
             urls = file.readlines()
             for url in urls:
                 url = url.split("\n")[0]

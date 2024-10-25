@@ -6,7 +6,7 @@ import asyncio
 DL_FILE = "/tmp/web_page"
 
 async def write_content(content:str, file:str):
-    async with aiofiles.open(file, mode="w") as out:
+    async with aiofiles.open(file, mode="w", encoding="utf-8") as out:
         await out.write(content.decode())
         await out.flush() 
 

@@ -12,7 +12,7 @@ def get_content(url:str):
         raise Exception(f'Failed to retrieve the webpage. Status code: {response.status_code}')
 
 def write_content(content:str, file:str):
-    f = open(file, "w")
+    f = open(file, "w", encoding="utf-8")
     f.write(content)
     f.close()
 
