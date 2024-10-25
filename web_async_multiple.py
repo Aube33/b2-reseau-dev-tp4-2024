@@ -2,15 +2,20 @@ import aiohttp
 import aiofiles
 import sys
 import asyncio
+import time
 
 DL_FILE = "/tmp/web_"
 
 async def write_content(content:str, file:str):
-    async with aiofiles.open(file, mode="w") as out:
-        await out.write(content.decode())
-        await out.flush() 
+    try:
+        async with aiofiles.open(file, mode="w") as out:
+            await out.write(content.decode())
+            await out.flush()
+    except Exception as e:
+        print(f"Erreur lors de l'écriture dans le fichier {file}: {e}")
 
 async def get_content(url:str):
+    print(f"✓ {url}")
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             resp = await resp.read()

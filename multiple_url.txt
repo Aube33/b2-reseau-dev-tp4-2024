@@ -1,4 +1,10 @@
+https://example.fr
+https://www.wikipedia.org
+https://www.youtube.com
+https://example.com
+https://www.reddit.com
+https://www.lemonde.fr
+https://www.bbc.com
+https://www.coursera.org
+https://stackoverflow.com
 https://www.ynov.com
-https://example.org
-https://www.thinkerview.com
-https://www.torproject.org

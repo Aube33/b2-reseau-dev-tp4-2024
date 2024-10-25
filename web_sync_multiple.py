@@ -1,16 +1,14 @@
 import sys
 import requests
+import time
 
 DL_FILE = "/tmp/web_"
 argv = sys.argv[1:]
 
 def get_content(url:str):
+    print(f"✓ {url}")
     response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        raise Exception(f'Failed to retrieve the webpage. Status code: {response.status_code}')
-    return content
+    return response.text
 
 def write_content(content:str, file:str):
     f = open(file, "w")

@@ -10,7 +10,6 @@ def get_content(url:str):
         return response.text
     else:
         raise Exception(f'Failed to retrieve the webpage. Status code: {response.status_code}')
-    return content
 
 def write_content(content:str, file:str):
     f = open(file, "w")
