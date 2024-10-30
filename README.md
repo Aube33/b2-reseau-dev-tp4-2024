@@ -50,3 +50,6 @@ Résultat: 1.123s
 ### 4. Un chat fonctionnel
 ### 5. Gérer des pseudos
 ### 6. Déconnexion
+
+## III. Chat Room bonus
+### 1. Basic Cosmetic

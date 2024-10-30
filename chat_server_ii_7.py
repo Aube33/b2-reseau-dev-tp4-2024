@@ -1,6 +1,13 @@
 import asyncio
+import random
 
 CLIENTS = {}
+
+def generate_random_rgb():
+    return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+def string_rgb(string:str, rgb:tuple):
+    return f"\033[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{string}\033[0m"
 
 def send_to_client(writer, message:str, *args:tuple):
     stringFormatted = message.format(*args)
@@ -15,13 +22,14 @@ async def handle_client_msg(reader, writer):
         # Déco
         if data == b'':
             if addr in CLIENTS.keys():
-                pseudoSave = CLIENTS[addr]["pseudo"]
+                pseudoColored = string_rgb(CLIENTS[addr]["pseudo"], CLIENTS[addr]["color"])
+
                 del CLIENTS[addr]
 
                 message_leave = "Annonce : {} a quitté la chatroom"
 
                 for client in CLIENTS.keys():
-                    send_to_client(CLIENTS[client]["w"], message_leave, (pseudoSave))
+                    send_to_client(CLIENTS[client]["w"], message_leave, (pseudoColored))
 
             break
 
@@ -35,18 +43,28 @@ async def handle_client_msg(reader, writer):
 
             if 'Hello|' in message:
                 CLIENTS[addr]["pseudo"] = message.split("Hello|")[1]
+                CLIENTS[addr]["color"] = generate_random_rgb()
+
+                pseudoColored = string_rgb(CLIENTS[addr]["pseudo"], CLIENTS[addr]["color"])
 
                 message = "Annonce : {} a rejoint la chatroom"
 
                 for client in CLIENTS.keys():
-                    send_to_client(CLIENTS[client]["w"], message, (CLIENTS[addr]["pseudo"]))
+                    send_to_client(CLIENTS[client]["w"], message, (pseudoColored))
     
         else:
+            pseudoColored = string_rgb(CLIENTS[addr]["pseudo"], CLIENTS[addr]["color"])
+
             message_to_others = "{} a dit : {}"
+            message_to_self = "Vous avez dit : {}"
 
             for client in CLIENTS.keys():
                 if client != addr:
-                    send_to_client(CLIENTS[client]["w"], message_to_others, *(CLIENTS[addr]["pseudo"], message))
+                    clientData = CLIENTS[client]
+
+                    send_to_client(CLIENTS[client]["w"], message_to_others, *(pseudoColored, message))
+                else:
+                    send_to_client(writer, message_to_self, (message))
 
         await writer.drain()
 
