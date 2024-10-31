@@ -2,7 +2,8 @@
 
 import asyncio
 import aioconsole
-
+import argparse
+import configparser
 
 async def receive_responses(reader):
     """
@@ -32,9 +33,45 @@ async def main():
     """
     Main function to have async
     """
+
+    parser = argparse.ArgumentParser(
+    prog='Chat Client TCP v7',
+    description='Connect to Chat TCP server to chat un max avec les potes',
+    epilog='Text at the bottom of help')
+
+    parser.add_argument(
+        '-a', '--address',
+        help='Set TCP host to connect',
+        nargs=1,
+    )
+    parser.add_argument(
+        '-p', '--port',
+        help='Set TCP port to connect',
+        nargs=1,
+    )
+    args = parser.parse_args()
+    config = configparser.ConfigParser()
+    config.read('server.conf')
+
+    HOST = ''
+    PORT = ''
+
+    if 'DEFAULT' in config:
+        if args.address == None:
+            HOST = config['DEFAULT']['Host']
+        else:
+            HOST = args.address[0]
+
+        if args.port == None:
+            PORT = config['DEFAULT']['Port']
+        else:
+            PORT = args.port[0]
+
+
+
     pseudo = input("Pseudo: ")
 
-    reader, writer = await asyncio.open_connection(host="127.0.0.1", port=8888)
+    reader, writer = await asyncio.open_connection(host=HOST, port=PORT)
 
     writer.write(f"Hello|{pseudo}".encode())
 

@@ -1,5 +1,8 @@
 import asyncio
 import random
+import argparse
+import configparser
+from datetime import datetime
 
 CLIENTS = {}
 
@@ -10,7 +13,11 @@ def string_rgb(string:str, rgb:tuple):
     return f"\033[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{string}\033[0m"
 
 def send_to_client(writer, message:str, *args:tuple):
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("[%H:%M]")
+
     stringFormatted = message.format(*args)
+    stringFormatted = f"{formatted_time} {stringFormatted}"
     writer.write(stringFormatted.encode())
 
 async def handle_client_msg(reader, writer):
@@ -69,7 +76,44 @@ async def handle_client_msg(reader, writer):
         await writer.drain()
 
 async def main():
-    server = await asyncio.start_server(handle_client_msg, '127.0.0.1', 8888)
+    # === Args and Config ===
+    parser = argparse.ArgumentParser(
+    prog='Chat Server TCP v7',
+    description='Host TCP server to chat un max avec les potes',
+    epilog='Text at the bottom of help')
+
+    parser.add_argument(
+        '-a', '--address',
+        help='Set TCP host to listen',
+        nargs=1,
+    )
+    parser.add_argument(
+        '-p', '--port',
+        help='Set TCP port to listen',
+        nargs=1,
+    )
+    args = parser.parse_args()
+    
+    config = configparser.ConfigParser()
+    config.read('client.conf')
+
+    HOST = ''
+    PORT = ''
+
+    if 'DEFAULT' in config:
+        if args.address == None:
+            HOST = config['DEFAULT']['Host']
+        else:
+            HOST = args.address[0]
+
+        if args.port == None:
+            PORT = config['DEFAULT']['Port']
+        else:
+            PORT = args.port[0]
+
+
+
+    server = await asyncio.start_server(handle_client_msg, HOST, PORT)
 
     addrs = ', '.join(str(sock.getsockname()) for sock in server.sockets)
     print(f'Serving on {addrs}')
